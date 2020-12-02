@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   menuOperations: {
-    fontSize: 50,
+    fontSize: 30,
     color: '#FFF',
   },
   menuResponse: {
-    fontSize: 25,
+    fontSize: 60,
     color: '#FFF',
   },
 });

@@ -4,18 +4,12 @@ import {StatusBar, SafeAreaView, View, StyleSheet} from 'react-native';
 import Menu from './components/menu';
 import Btn from './components/button';
 
-var variables = {
-  screenValue: '',
-  submit: false,
-  result: 0,
-  dot: false,
-  clear: 'AC',
-};
-
 export default function App() {
-  const [valueScreen, setValueScreen] = useState(variables.screenValue);
-  const [valueResult, setValueResult] = useState(variables.result);
-  const [labelClear, setLabelClear] = useState(variables.clear);
+  const [valueScreen, setValueScreen] = useState('');
+  const [valueResult, setValueResult] = useState(0);
+  const [submit, setSubmit] = useState(false);
+  const [dot, setDot] = useState(false);
+  const [labelClear, setLabelClear] = useState('AC');
 
   useEffect(() => {
     if (valueScreen === '') {
@@ -24,32 +18,32 @@ export default function App() {
   }, [valueScreen]);
 
   function addKey(key) {
-    variables.screenValue += key;
+    setValueScreen(valueScreen + key);
 
-    setValueScreen(variables.screenValue);
-    setValueResult(variables.result);
-
-    variables.submit = false;
+    setValueResult(0); //? TESTAR \/
+    setSubmit(false);
     setLabelClear('C');
   }
 
+  function calc() {
+    try {
+      setValueResult(eval(valueScreen)); //* Eval temp
+      setSubmit(true);
+    } catch {
+      setValueResult('Error');
+      setSubmit(true);
+    }
+  }
+
   function clear() {
-    if (variables.screenValue !== '') {
-      setValueScreen(
-        (variables.screenValue = valueScreen.substring(
-          0,
-          valueScreen.length - 1,
-        )),
-      );
+    if (valueScreen !== '') {
+      setValueScreen(valueScreen.substring(0, valueScreen.length - 1));
     } else {
-      variables = {
-        screenValue: '',
-        submit: false,
-        result: 0,
-        dot: false,
-      };
-      setValueScreen(variables.screenValue);
-      setValueResult(variables.result);
+      setValueScreen('');
+      setValueResult(0);
+      setSubmit(false);
+      setDot(false);
+      setLabelClear('AC');
     }
   }
 
@@ -175,7 +169,13 @@ export default function App() {
               addKey('.');
             }}
           />
-          <Btn label="=" buttonOperations onClick={() => {}} />
+          <Btn
+            label="="
+            buttonOperations
+            onClick={() => {
+              calc();
+            }}
+          />
         </View>
       </SafeAreaView>
     </>

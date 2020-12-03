@@ -18,9 +18,24 @@ export default function App() {
   }, [valueScreen]);
 
   function addKey(key) {
-    setValueScreen(valueScreen + key);
+    if (key === '/' || key === '*' || key === '-' || key === '+') {
+      setDot(false);
+    }
 
-    setValueResult(0); //? TESTAR \/
+    if (key === '.' && dot) {
+      return;
+    }
+
+    if (key === '.' && !dot) {
+      setDot(true);
+    }
+
+    if ((key === '/' || key === '*' || key === '-' || key === '+') && submit) {
+      setValueScreen(valueResult + key);
+      setValueResult(0);
+      return;
+    }
+    setValueScreen(valueScreen + key);
     setSubmit(false);
     setLabelClear('C');
   }
@@ -37,14 +52,19 @@ export default function App() {
 
   function clear() {
     if (valueScreen !== '') {
-      setValueScreen(valueScreen.substring(0, valueScreen.length - 1));
+      const tam = valueScreen.length - 1;
+      setValueScreen(valueScreen.substring(0, tam));
     } else {
-      setValueScreen('');
-      setValueResult(0);
-      setSubmit(false);
-      setDot(false);
-      setLabelClear('AC');
+      reset();
     }
+  }
+
+  function reset() {
+    setValueScreen('');
+    setValueResult(0);
+    setSubmit(false);
+    setDot(false);
+    setLabelClear('AC');
   }
 
   return (
